@@ -10,7 +10,6 @@ namespace Model
         {
             Straight, LeftCorner, RightCorner, StartGrid, Finish
         }
-
         public SectionTypes SectionType { get; set; }
 
         public Section(SectionTypes section)

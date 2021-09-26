@@ -11,12 +11,18 @@ namespace Model
 
         public Track(string name, Section.SectionTypes[] sections)
         {
-            Sections = new LinkedList<Section>();
+            Name = name;
+            Sections = InitializeSections(sections);
+        }
+
+        private LinkedList<Section> InitializeSections(Section.SectionTypes[] sections)
+        {
+            LinkedList<Section> sectionList = new LinkedList<Section>();
             for (int i = 0; i < sections.Length; i++)
             {
-                Sections.AddLast(new Section(sections[i]));
+                sectionList.AddLast(new Section(sections[i]));
             }
-            Name = name;
+            return sectionList;
         }
     }
 }

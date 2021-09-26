@@ -17,9 +17,9 @@ namespace Model
 
         public Track NextTrack()
         {
-            if (Tracks.Count != 0)
+            if (Tracks.TryDequeue(out Track result))
             {
-                return Tracks.Peek();
+                return result;
             }
             return null;
         }

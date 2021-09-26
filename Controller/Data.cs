@@ -25,18 +25,38 @@ namespace Controller
 
         public static void TrackToevoegen()
         {
-            Section.SectionTypes[] sections01 = { Section.SectionTypes.StartGrid, Section.SectionTypes.RightCorner, Section.SectionTypes.Straight, Section.SectionTypes.Finish };
+            Section.SectionTypes[] sections01 =
+            {
+                Section.SectionTypes.Straight,
+                Section.SectionTypes.StartGrid,
+                Section.SectionTypes.StartGrid,
+                Section.SectionTypes.StartGrid,
+                Section.SectionTypes.RightCorner,
+                Section.SectionTypes.RightCorner,
+                Section.SectionTypes.Straight,
+                Section.SectionTypes.Straight,
+                Section.SectionTypes.Straight,
+                Section.SectionTypes.RightCorner,
+                Section.SectionTypes.RightCorner
+            };
             Comp.Tracks.Enqueue(new Track("Track01", sections01));
 
-            Section.SectionTypes[] sections02 = { Section.SectionTypes.StartGrid, Section.SectionTypes.LeftCorner, Section.SectionTypes.Straight, Section.SectionTypes.Finish };
+            Section.SectionTypes[] sections02 =
+            {
+                Section.SectionTypes.StartGrid,
+                Section.SectionTypes.Straight, 
+                Section.SectionTypes.Straight, 
+                Section.SectionTypes.Finish
+            };
             Comp.Tracks.Enqueue(new Track("Track02", sections02));
         }
 
         public static void NextRace()
         {
-            if (Comp.NextTrack() != null)
+            Track result = Comp.NextTrack();
+            if (result != null)
             {
-                CurrentRace = new Race(Comp.Tracks.Dequeue(), Comp.Participants);
+                CurrentRace = new Race(result, Comp.Participants);
             }
             else
             {
