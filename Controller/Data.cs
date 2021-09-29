@@ -19,15 +19,18 @@ namespace Controller
 
         public static void DeelnemerToevoegen()
         {
-            Comp.Participants.Add(new Driver("Driver01", new Car(10, 10, 10), IParticipant.TeamColors.Red));
-            Comp.Participants.Add(new Driver("Driver02", new Car(10, 10, 10), IParticipant.TeamColors.Blue));
+            Comp.Participants.Add(new Driver("A", new Car(10, 10, 10), IParticipant.TeamColors.Red));
+            Comp.Participants.Add(new Driver("B", new Car(10, 10, 10), IParticipant.TeamColors.Blue));
+            Comp.Participants.Add(new Driver("C", new Car(10, 10, 10), IParticipant.TeamColors.Green));
+            Comp.Participants.Add(new Driver("D", new Car(10, 10, 10), IParticipant.TeamColors.Grey));
+            Comp.Participants.Add(new Driver("E", new Car(10, 10, 10), IParticipant.TeamColors.Yellow));
         }
 
         public static void TrackToevoegen()
         {
             Section.SectionTypes[] sections01 =
             {
-                Section.SectionTypes.Straight,
+                Section.SectionTypes.StartGrid,
                 Section.SectionTypes.StartGrid,
                 Section.SectionTypes.StartGrid,
                 Section.SectionTypes.StartGrid,
@@ -35,9 +38,12 @@ namespace Controller
                 Section.SectionTypes.RightCorner,
                 Section.SectionTypes.Straight,
                 Section.SectionTypes.Straight,
+                Section.SectionTypes.Finish,
                 Section.SectionTypes.Straight,
                 Section.SectionTypes.RightCorner,
-                Section.SectionTypes.RightCorner
+                Section.SectionTypes.RightCorner,
+                
+                
             };
             Comp.Tracks.Enqueue(new Track("Track01", sections01));
 
