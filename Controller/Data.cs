@@ -10,11 +10,15 @@ namespace Controller
         public static Competition Comp { get; set; }
         public static Race CurrentRace { get; set; }
 
-        public static void Initialize()
+        private static bool isConsole;
+
+        public static void Initialize(bool console)
         {
             Comp = new Competition();
+            isConsole = console;
             DeelnemerToevoegen();
             TrackToevoegen();
+            NextRace();
         }
 
         public static void DeelnemerToevoegen()
@@ -28,45 +32,56 @@ namespace Controller
 
         public static void TrackToevoegen()
         {
-            Section.SectionTypes[] sections01 =
+            Section.SectionTypes[] ride01 =
             {
                 Section.SectionTypes.StartGrid,
                 Section.SectionTypes.StartGrid,
                 Section.SectionTypes.StartGrid,
-                Section.SectionTypes.StartGrid,
-                Section.SectionTypes.RightCorner,
-                Section.SectionTypes.RightCorner,
-                Section.SectionTypes.Straight,
-                Section.SectionTypes.Straight,
                 Section.SectionTypes.Finish,
+                Section.SectionTypes.RightCorner,
+                Section.SectionTypes.Straight,
+                Section.SectionTypes.RightCorner,
+                Section.SectionTypes.Straight,
+                Section.SectionTypes.Straight,
+                Section.SectionTypes.Straight,
+                Section.SectionTypes.Straight,
+                Section.SectionTypes.RightCorner,
+                Section.SectionTypes.Straight,
+                Section.SectionTypes.RightCorner,
+            };
+            Comp.Tracks.Enqueue(new Track("Warming up", ride01));
+
+            /*Section.SectionTypes[] sections01 =
+            {
+                Section.SectionTypes.StartGrid,
+                Section.SectionTypes.StartGrid,
+                Section.SectionTypes.StartGrid,
+                Section.SectionTypes.RightCorner,
+                Section.SectionTypes.RightCorner,
+                Section.SectionTypes.Straight,
+                Section.SectionTypes.Straight,
+                Section.SectionTypes.Straight,
                 Section.SectionTypes.Straight,
                 Section.SectionTypes.RightCorner,
                 Section.SectionTypes.RightCorner,
-                
-                
+                Section.SectionTypes.Finish,
             };
-            Comp.Tracks.Enqueue(new Track("Track01", sections01));
-
-            Section.SectionTypes[] sections02 =
-            {
-                Section.SectionTypes.StartGrid,
-                Section.SectionTypes.Straight, 
-                Section.SectionTypes.Straight, 
-                Section.SectionTypes.Finish
-            };
-            Comp.Tracks.Enqueue(new Track("Track02", sections02));
+            Comp.Tracks.Enqueue(new Track("Race 1", sections01));*/
         }
 
         public static void NextRace()
         {
+            
             Track result = Comp.NextTrack();
+            if (isConsole) Console.Clear();
             if (result != null)
             {
                 CurrentRace = new Race(result, Comp.Participants);
             }
             else
             {
-                Console.WriteLine("Geen race meer");
+                CurrentRace = null;
+                Console.WriteLine("No more races");
             }
         }
     }

@@ -7,6 +7,7 @@ namespace ControllerTest
     public class Model_Competition_NextTrackShould
     {
         private Competition _competition;
+
         
         [SetUp]
         public void SetUp()

@@ -1,13 +1,13 @@
 ﻿using System;
+using Controller;
 using Model;
 
 namespace Race_Simulator
 {
     public static class ConsoleVisualisatie
     {
-        static int _richting;
-        public static int X { get; set; }
-        public static int Y { get; set; }
+        public static Direction _direction;
+        public static int _x, _y, _size;
 
         #region graphics
         //  ═ ║   ╔   ╗   ╚  ╝
@@ -24,165 +24,202 @@ namespace Race_Simulator
         
 
         #endregion
-        
+
+        public enum Direction
+        {
+            North, East, South, West
+        }
+
         public static void Initialize()
         {
-            _richting = 1;
+            Console.CursorVisible = false;
+            _direction = Direction.East;
+            _size = 4;
+            Data.CurrentRace.DriversChanged += DriversChangedHandler;
+            Data.CurrentRace.NextRace += NextRaceHandler;
         }
-
-        public static string DrawDriver(String s, IParticipant d1, IParticipant d2)
-        {
-            s = s.Replace("1", d1.Name.Substring(0, 1));
-            s = s.Replace("2", d2.Name.Substring(0, 1));
-            
-            return s;
-        }
-
+        
         public static void DrawTrack(Track t)
         {
             PreDrawTrack(t);
+            
             foreach (Section section in t.Sections)
             {
                 switch (section.SectionType)
                 {
                     case Section.SectionTypes.StartGrid:
-                        if (_richting == 1 || _richting == 3)
-                            GenerateSection(_startHorizontal);
+                        if (_direction == Direction.East || _direction == Direction.West)
+                            GenerateSection(_startHorizontal, section);
                         else
-                            GenerateSection(_startVertical); 
+                            GenerateSection(_startVertical, section); 
                         break;
                     case Section.SectionTypes.Straight:
-                        if (_richting == 1 || _richting == 3)
-                            GenerateSection(_straightHorizontal);
+                        if (_direction == Direction.East || _direction == Direction.West)
+                            GenerateSection(_straightHorizontal, section);
                         else
-                            GenerateSection(_straightVertical);
+                            GenerateSection(_straightVertical, section);
                         break;
                     case Section.SectionTypes.LeftCorner:
-                        if (_richting == 0)
-                            GenerateSection(_corner1);
-                        else if (_richting == 1)
-                            GenerateSection(_corner4);
-                        else if (_richting == 2)
-                            GenerateSection(_corner2);
+                        if (_direction == Direction.North)
+                            GenerateSection(_corner1, section);
+                        else if (_direction == Direction.East)
+                            GenerateSection(_corner4, section);
+                        else if (_direction == Direction.South)
+                            GenerateSection(_corner2, section);
                         else
-                            GenerateSection(_corner3);
-                        BepaalRichting(Section.SectionTypes.LeftCorner);
+                            GenerateSection(_corner3, section);
+                        _direction = SetNewDirection(Section.SectionTypes.LeftCorner, _direction);
                         break;
                     case Section.SectionTypes.RightCorner:
-                        if (_richting == 0)
-                            GenerateSection(_corner3);
-                        else if (_richting == 1)
-                            GenerateSection(_corner1);
-                        else if (_richting == 2)
-                            GenerateSection(_corner4);
+                        if (_direction == Direction.North)
+                            GenerateSection(_corner3, section);
+                        else if (_direction == Direction.East)
+                            GenerateSection(_corner1, section);
+                        else if (_direction == Direction.South)
+                            GenerateSection(_corner4, section);
                         else
-                            GenerateSection(_corner2);
-                        BepaalRichting(Section.SectionTypes.RightCorner);
+                            GenerateSection(_corner2, section);
+                        _direction = SetNewDirection(Section.SectionTypes.RightCorner, _direction);
                         break;
                     case Section.SectionTypes.Finish:
-                        if (_richting == 1 || _richting == 3)
-                            GenerateSection(_finishHorizontal);
+                        if (_direction == Direction.East || _direction == Direction.West)
+                            GenerateSection(_finishHorizontal, section);
                         else
-                            GenerateSection(_finishVertical);
+                            GenerateSection(_finishVertical, section);
                         break;
                 }
 
-                switch (_richting)
+                switch (_direction)
                 {
-                    case 0:
-                        Y -= 4;
+                    case Direction.North:
+                        _y -= _size;
                         break;
-                    case 1:
-                        X += 4;
+                    case Direction.East:
+                        _x += _size;
                         break;
-                    case 2:
-                        Y += 4;
+                    case Direction.South:
+                        _y += _size;
                         break;
-                    case 3:
-                        X -= 4;
+                    case Direction.West:
+                        _x -= _size;
                         break;
                 }
-                Console.SetCursorPosition(X, Y);
+                Console.SetCursorPosition(_x, _y);
             }
         }
-
-        public static void GenerateSection(string[] section)
+        
+        public static string DrawDrivers(string s, IParticipant d1, IParticipant d2)
         {
-            Y -= 4;
-            foreach (string s in section)
+            if (d1 != null)
             {
-                Console.SetCursorPosition(X, Y);
-                Console.WriteLine(s);
-                Y++;
+                s = s.Replace("1", d1.Name.Substring(0, 1));
+            }
+            else
+            {
+                s = s.Replace("1", " ");
+            }
+
+            if (d2 != null)
+            {
+                s = s.Replace("2", d2.Name.Substring(0, 1));
+            }
+            else
+            {
+                
+                s = s.Replace("2", " ");
+            }
+            
+            return s;
+        }
+
+        public static void GenerateSection(string[] sectionStrings, Section section)
+        {
+            _y -= 4;
+            IParticipant d1, d2;
+            foreach (string s in sectionStrings)
+            {
+                string ss = s;
+                d1 = Data.CurrentRace.GetSectionData(section).Left;
+                d2 = Data.CurrentRace.GetSectionData(section).Right;
+                ss = DrawDrivers(s, d1, d2);
+                Console.SetCursorPosition(_x, _y);
+                Console.WriteLine(ss);
+                _y++;
             }
         }
 
         public static void PreDrawTrack(Track t)
         {
-            int x, y, xx, yy;
+            int x, y;
             x = 0;
             y = 0;
-            xx = 0;
-            yy = 0;
 
             foreach (Section section in t.Sections)
             {
                 if (section.SectionType == Section.SectionTypes.LeftCorner)
                 {
-                    BepaalRichting(section.SectionType);
+                    _direction = SetNewDirection(section.SectionType, _direction);
                 }else if (section.SectionType == Section.SectionTypes.RightCorner)
                 {
-                    BepaalRichting(section.SectionType);
+                    _direction = SetNewDirection(section.SectionType, _direction);
                 }
 
-                switch (_richting)
+                switch (_direction)
                 {
-                    case 0:
-                        y -= 4;
+                    case Direction.North:
+                        y -= _size;
                         break;
-                    case 1:
-                        x += 4;
+                    case Direction.East:
+                        x += _size;
                         break;
-                    case 2:
-                        y += 4;
+                    case Direction.South:
+                        y += _size;
                         break;
-                    case 3:
-                        x -= 4;
+                    case Direction.West:
+                        x -= _size;
                         break;
                 }
 
-                if (xx > x)
+                if (_x > x)
                 {
-                    xx = x;
+                    _x = x;
                 }
 
-                if (yy > y)
+                if (_y > y)
                 {
-                    yy = y;
+                    _y = y;
                 }
             }
-            Console.SetCursorPosition(-xx, -yy);
-            _richting = 1;
-            X = -xx;
-            Y = -(yy - 4);
+            Console.SetCursorPosition(-_x, -_y);
+            _direction = Direction.East;
+            _x = -_x;
+            _y = -(_y - (_size + _size));
         }
 
-        private static void BepaalRichting(Section.SectionTypes sectionType)
+        public static Direction SetNewDirection(Section.SectionTypes sectionType, Direction r)
         {
             switch (sectionType)
             {
                 case Section.SectionTypes.LeftCorner:
-                    if (_richting == 0)
-                        _richting = 3;
-                    else
-                        _richting -= 1;
-                    break;
+                    return r == Direction.North ? Direction.West : r - 1;
                 case Section.SectionTypes.RightCorner:
-                    if (_richting == 3)
-                        _richting = 0;
-                    else
-                         _richting += 1;
-                    break;
+                    return r == Direction.West ? Direction.North : r + 1;
+            }
+            return Direction.East;
+        }
+
+        public static void DriversChangedHandler(object s, DriversChangedEventArgs e)
+        {
+            DrawTrack(e.Track);
+        }
+
+        public static void NextRaceHandler(object s, NextRaceEventsArgs e)
+        {
+            Data.CurrentRace.ClearEvents();
+            Data.NextRace();
+            if (Data.CurrentRace != null)
+            {
+                Initialize();
             }
         }
     }

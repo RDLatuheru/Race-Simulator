@@ -11,10 +11,12 @@ namespace Model
             Straight, LeftCorner, RightCorner, StartGrid, Finish
         }
         public SectionTypes SectionType { get; set; }
+        public static int SectionLength { get; set; }
 
         public Section(SectionTypes section)
         {
             SectionType = section;
+            SectionLength = 100;
         }
     }
 }

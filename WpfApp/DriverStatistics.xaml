@@ -1,0 +1,29 @@
+﻿<Window x:Class="WpfApp.DriverStatistics"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp"
+        mc:Ignorable="d"
+        Title="DriverStatistics" Height="408" Width="638">
+    <Window.DataContext>
+        <local:DataContext/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Label Content="Times broken down:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+        <Label Content="Start time:" Grid.Column="2" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <Label Content="Driver equipment:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <DockPanel LastChildFill="False" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,41,212,0">
+            <ListView ItemsSource="{Binding Equipment, Mode=OneWay}"></ListView>
+        </DockPanel>
+        <DockPanel Grid.Column="1" LastChildFill="False" Margin="0,41,0,0">
+            <ListView ItemsSource="{Binding TimesBrokenDown, Mode=OneWay}" ></ListView>
+        </DockPanel>
+        <Label Content="{Binding StartTime, Mode=OneWay}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Height="58" Width="203"/>
+    </Grid>
+</Window>

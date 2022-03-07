@@ -10,6 +10,7 @@ namespace Model
         public int Points { get; set; }
         public IEquipment Equipment { get; set; }
         public IParticipant.TeamColors TeamColor { get; set; }
+        public int Position { get; set; }
 
         public Driver(string name, IEquipment equipment, IParticipant.TeamColors teamcolor)
         {
@@ -17,6 +18,7 @@ namespace Model
             Points = 0;
             Equipment = equipment;
             TeamColor = teamcolor;
+            Position = 0;
         }
     }
 }

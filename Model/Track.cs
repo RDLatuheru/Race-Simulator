@@ -8,6 +8,9 @@ namespace Model
     {
         public string Name { get; set; }
         public LinkedList<Section> Sections { get; set; }
+        public Section FirstSection { get; set; }
+        public Section LastSection { get; set; }
+
 
         public Track(string name, Section.SectionTypes[] sections)
         {
@@ -20,7 +23,16 @@ namespace Model
             LinkedList<Section> sectionList = new LinkedList<Section>();
             for (int i = 0; i < sections.Length; i++)
             {
-                sectionList.AddLast(new Section(sections[i]));
+                Section section = new Section(sections[i]);
+                sectionList.AddLast(section);
+                if (i == 0)
+                {
+                    FirstSection = section;
+                }
+                if (i == sections.Length - 1)
+                {
+                    LastSection = section;
+                }
             }
             return sectionList;
         }

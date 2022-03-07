@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Channels;
 using Model;
 using Controller;
 using Race_Simulator;
@@ -12,22 +13,13 @@ namespace Race_Simulator
         {
             Console.BackgroundColor = ConsoleColor.Green;
             
-            Data.Initialize();
-            
-            Data.NextRace();
+            Data.Initialize(true);
             ConsoleVisualisatie.Initialize();
-            ConsoleVisualisatie.DrawTrack(Data.CurrentRace.Track);
-            Console.WriteLine();
             
-            /*Data.NextRace();
-            ConsoleVisualisatie.Initialize();
-            ConsoleVisualisatie.DrawTrack(Data.CurrentRace.Track);
-            
-            Data.NextRace();*/
 
             for (;;)
             {
-                Thread.Sleep(100);
+                Thread.Sleep(500);
             }
         }
     }

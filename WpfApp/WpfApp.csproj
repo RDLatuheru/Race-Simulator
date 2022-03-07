@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Visuals\carBlue.png" />
+    <None Remove="Visuals\carGreen.png" />
+    <None Remove="Visuals\carGrey.png" />
+    <None Remove="Visuals\carRed.png" />
+    <None Remove="Visuals\carYellow.png" />
+    <None Remove="Visuals\Corner.png" />
+    <None Remove="Visuals\Finish.png" />
+    <None Remove="Visuals\Start.png" />
+    <None Remove="Visuals\Straight.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Visuals\carBlue.png" />
+    <Content Include="Visuals\carGreen.png" />
+    <Content Include="Visuals\carGrey.png" />
+    <Content Include="Visuals\carRed.png" />
+    <Content Include="Visuals\carYellow.png" />
+    <Content Include="Visuals\Finish.png" />
+    <Content Include="Visuals\Start.png" />
+    <Content Include="Visuals\Straight.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Controller\Controller.csproj" />
+    <ProjectReference Include="..\Model\Model.csproj" />
+  </ItemGroup>
+
+</Project>
